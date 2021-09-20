@@ -1,2 +1,5 @@
-# Algorithrms_homework
-For practise!!!
+# ReadMe
+
+## 2021-9-20
+
+尝试用 markdown 和 $LaTeX$ 来写算法的作业。大概的步骤是先手写草稿，之后再录入到电脑里。$LaTeX$ 这东西不用就不熟，需要常用。同时我将会边用边完善我的 $LaTeX$ 的笔记，算是一举两得了。
