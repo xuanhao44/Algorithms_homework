@@ -1,23 +1,25 @@
-#  第二章-作业
+
+
+# 第二章-作业
 
 ## 1
 
 用 $O$、$\Omega$、$\theta$ 表示函数 $f$ 与 $g$ 之间阶的关系，并分别指出下列函数中阶最低和最高的函数：（该题考察阶的关系，20分）
 
 1. $ f(n)=100$，$g(n)=\sqrt[100]{n}$
-    $f(n)=O(g(n))$
+   $f(n)=O(g(n))$
 
 2. $f(n)=6n+n⌊log n⌋$，$g(n)=3n$
-    $g(n)=O(f(n))$
+   $g(n)=O(f(n))$
 
 3. $f(n)=\frac n {logn} - 1$，$g(n)=2\sqrt{n}$
-    $f(n)=O(g(n))$
+   $f(n)=O(g(n))$
 
 4. $f(n)=2^n+n^2$，$ g(n)=3^n$
-    $f(n)=O(g(n))$
+   $f(n)=O(g(n))$
 
 5. $f(n)=log_3 n$，$ g(n)=log_2 n$
-    $f(n)=θ(g(n))$
+   $f(n)=θ(g(n))$
 
 - 阶最低的函数: $f(n)=100$
 - 阶最高的函数: $g(n)=3^n$
@@ -65,13 +67,13 @@ $T(n) = T(\sqrt{n}) + \Theta(lglgn)$
 
 令 $S(m)=T(2^m)$，则 $S(m)=S(\frac m 2)+\Theta(lgm)$.
 
-尝试使用master定理，则
+尝试使用 $master$ 定理，则
 
 $$
 a=1,b=2,f(m)=\Theta(logm),m^{log_b a}=m^{log_2 1}=1
 $$
 
-$f(m)$ 不是多项式的大于 $n^{log_b a}$，不能用 master 定理.
+$f(m)$ 不是多项式的大于 $n^{log_b a}$，不能用 $master$ 定理.
 
 设 $q=logm$，则 $m=2^q，S(2^q)=S(2^q/2)+\Theta(q)$.
 
@@ -89,7 +91,7 @@ $$
 \frac{c_1}2q^2\leqslant c_1\sum_{k=1}^qk\leqslant P(q)-P(0)\leqslant c_2\sum_{k=1}^qk\leqslant c_2q^2
 $$
 
-可知 $P(q) = \Theta(q^2)$，而 $n = 2^{2^q},q=loglogn$，故 $T(n) = \Theta((logn)^2)$
+可知 $P(q) = \Theta(q^2)$，而 $n = 2^{2^q},q=loglogn$，故 $T(n) = \Theta((loglogn)^2)$
 
 ### 3.3
 
