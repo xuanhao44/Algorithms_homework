@@ -5,19 +5,19 @@
 用 $O$、$\Omega$、$\theta$ 表示函数 $f$ 与 $g$ 之间阶的关系，并分别指出下列函数中阶最低和最高的函数：（该题考察阶的关系，20分）
 
 1. $ f(n) = 100$，$g(n) = \sqrt[100]{n}$
-   $f(n) = O(g(n))$
+  $f(n) = O(g(n))$
 
-2. $f(n)=6n + n\lfloor\, \log n \,\rfloor$，$g(n)=3n$
-   $g(n) = O(f(n))$
+2. $f(n) = 6n + n \lfloor\, \log n \,\rfloor$，$g(n)=3n$
+  $g(n) = O(f(n))$
 
 3. $f(n) = \frac n {\log n} - 1$，$g(n) = 2\sqrt{n}$
-   $g(n) = O(f(n))$
+  $g(n) = O(f(n))$
 
-4. $f(n) = 2^n+n^2$，$ g(n) = 3^n$
-   $f(n) = O(g(n))$
+4. $f(n) = 2^n + n^2$，$ g(n) = 3^n$
+  $f(n) = O(g(n))$
 
 5. $f(n) = \log_3 n$，$ g(n) = \log_2 n$
-   $f(n) = θ(g(n))$
+  $f(n) = θ(g(n))$
 
 - 阶最低的函数: $f(n) = 100$
 - 阶最高的函数: $g(n) = 3^n$
@@ -31,14 +31,16 @@
 因为当 $k-1 \le x \le k$ 时，有 $\frac 1 {k^2} \le \frac 1 {x^2}$，所以
 
 $$
-\frac 1 {k^2} = \int_{k-1}^{k} \frac 1 {k^2} \, dx \le \int_{k-1}^{k} \frac 1 {x^2} \, dx \, (k=2,3 \cdots)
+  \frac 1 {k^2} = \int_{k-1}^{k} \frac 1 {k^2} \, dx \le \int_{k-1}^{k} \frac 1 {x^2} \, dx \, (k=2,3 \cdots)
 $$
 
 从而级数的部分和为
 
 $$
-S_n = 1 + \sum_{k=2}^n \frac 1 {k^2} \le 1 + \sum_{k=2}^n \int_{k-1}^{k} \frac 1 {x^2} \, dx = 1 + \int_1^n \frac 1 {x^2} \, dx \\
-  = 1 + \frac 1 {2-1}(1-\frac 1 {n^{2-1}}) < 1 + \frac 1 {2-1} = 2 \, (n=2,3 \cdots)
+\begin{align*}
+S_n ={} & 1 + \sum_{k=2}^n \frac 1 {k^2} \le 1 + \sum_{k=2}^n \int_{k-1}^{k} \frac 1 {x^2} \, dx = 1 + \int_1^n \frac 1 {x^2} \, dx \\
+    ={} & 1 + \frac 1 {2-1}(1-\frac 1 {n^{2-1}}) < 1 + \frac 1 {2-1} = 2 \, (n=2,3 \cdots)
+\end{align*}
 $$
 
 表明数列 $\{S_n\}$ 有界，即 $\sum_{k=1}^{\infty} \frac 1 {k^2}$ 有常数上界。
@@ -52,7 +54,7 @@ $$
 $T(n) = 3T(n/5)+(lgn)^2$
 
 $$
-a = 3,b = 5,f(n) = (lgn)^2,n^{\log_b a} = n^{\log_5 3} = O(n^{0.683}) \\
+  a = 3,b = 5,f(n) = (lgn)^2,n^{\log_b a} = n^{\log_5 3} = O(n^{0.683}) \\
   f(n) = (lgn)^2 = O(n^{\log_53-0.28}) \\
   \therefore T(n) = \Theta(n^{\log_53}).
 $$
@@ -68,7 +70,7 @@ $T(n) = T(\sqrt{n}) + \Theta(\lg \lg n)$
 尝试使用 $master$ 定理，则
 
 $$
-a = 1,b = 2,f(m) = \Theta(\lg m),m^{\log_b a} = m^{\log_2 1} = 1
+  a = 1,b = 2,f(m) = \Theta(\lg m),m^{\log_b a} = m^{\log_2 1} = 1
 $$
 
 $f(m)$ 不是多项式的大于 $n^{\log_b a}$，不能用 $master$ 定理.
@@ -80,13 +82,13 @@ $f(m)$ 不是多项式的大于 $n^{\log_b a}$，不能用 $master$ 定理.
 故 $\Theta(q) = P(q) - P(q-1)$，由定义有：存在 $c_1,c_2>0,n_0>0$，使得当 $n>n_0$ 时，下式成立：
 
 $$
-  c_1q\leqslant P(q)-P(q-1)\leqslant c_2q
+  c_1q\leqslant P(q) - P(q-1)\leqslant c_2q
 $$
 
 $q$ 从 $1$ 取到 $q$，并累加得
 
 $$
-\frac{c_1}2q^2\leqslant c_1\sum_{k=1}^qk\leqslant P(q)-P(0)\leqslant c_2\sum_{k=1}^qk\leqslant c_2q^2
+  \frac{c_1}2q^2\leqslant c_1\sum_{k=1}^qk\leqslant P(q) - P(0)\leqslant c_2\sum_{k=1}^qk\leqslant c_2q^2
 $$
 
 可知 $P(q) = \Theta(q^2)$，而 $n = 2^{2^q},q = \lg \lg n$，故 $T(n) = \Theta((\lg \lg n)^2)$
@@ -96,7 +98,7 @@ $$
 $T(n) = 10T(n/3) + 17n^{1.2}$
 
 $$
-a = 10,b = 2,f(n) = 17n^{1.2},n^{\log_b a} = n^{\log_3 {10}} = O(n^{2.095}) \\
+  a = 10,b = 2,f(n) = 17n^{1.2},n^{\log_b a} = n^{\log_3 {10}} = O(n^{2.095}) \\
   f(n) = 17n^{1.2} = O(n^{\log_3 {10} - \epsilon}) \, ,\epsilon = 0.8. \\
   \therefore T(n) = \Theta(n^{\log_3 {10}}).
 $$
@@ -106,7 +108,7 @@ $$
 $T(n) = 7T(n/2) + n^3$
 
 $$
-a = 7,b = 2,f(n) = n^3,n^{\log_b a} = n^{\log_2 7} = O(n^{2.80}) \\
+  a = 7,b = 2,f(n) = n^3,n^{\log_b a} = n^{\log_2 7} = O(n^{2.80}) \\
   f(n) = n^3 = \Omega(n^{\log_2 7+\epsilon}) \, ,\epsilon = 0.2.
 $$
 
@@ -133,7 +135,7 @@ $T(n) = T(n/2 + \sqrt{n}) + \sqrt{6046}$
 $T(n) = 25T(n/5) + n^{2.1}$
 
 $$
-a = 25,b = 5,f(n) = n^{2.1},n^{\log_b a} = n^{\log_5 {25}} = n^2 \\
+  a = 25,b = 5,f(n) = n^{2.1},n^{\log_b a} = n^{\log_5 {25}} = n^2 \\
   f(n) = n^{2.1} = \Omega(n^{\log_b a+\epsilon}) \, ,\epsilon = 0.1.
 $$
 
@@ -146,7 +148,7 @@ $$
 $T(n) = 25T(n/5) + n^{1.5}$
 
 $$
-a = 25,b = 5,f(n) = n^{1.5},n^{\log_b a} = n^2 \\
+  a = 25,b = 5,f(n) = n^{1.5},n^{\log_b a} = n^2 \\
   f(n) = n^{1.5} = \Theta(n^{\log_b a-\epsilon}) \, ,\epsilon = 0.5. \\
   \therefore T(n) = \Theta(n^{\log_b a}) = \Theta(n^2).
 $$
@@ -156,7 +158,7 @@ $$
 $T(n) = 25T(n/5) + n^2$
 
 $$
-a = 25,b = 5,f(n) = n^2,n^{\log_b a} = n^2 \\
+  a = 25,b = 5,f(n) = n^2,n^{\log_b a} = n^2 \\
   f(n) = n^2 = \Theta(n^2) = \Theta(n^{\log_b a}) \\
   \therefore T(n) = \Theta(n^{\log_b a}\log n) = \Theta(n^2\log n).
 $$
@@ -174,7 +176,7 @@ $$
     T(n) ={} & cn^2 + \frac 3 {16}cn^2 + (\frac 3 {16})^2cn^2 + \cdots + (\frac 3 {16})^{\log_4 n - 1}cn^2 + \Theta(n^{\log_4 3}) \\
          ={} & \sum_{i=0}^{\log_4 n - 1}(\frac 3 {16})^icn^2 + \Theta(n^{\log_4^3}) \\
          ={} & \frac {(\frac 3 {16})^{\log_4 n}-1}{\frac 3 {16} -1}cn^2 + \Theta(n^{\log_4 3})
-  \end{align*}
+\end{align*}
 $$
 
 猜测 $T(n) = O(n^2)$，用代入法验证.
