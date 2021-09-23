@@ -43,7 +43,40 @@ return i+1
 
 答：
 
+描述
+
 分别求两个升序序列 $A$、$B$ 的中位数，设为 $a$ 和 $b$。若$a = b$，则 $a$ 或 $b$ 即为所求的中位数；否则，舍弃 $a$、$b$ 中较小者所在序列之较小一半，同时舍弃较大者所在序列之较大一半，要求两次舍弃的元素个数相同。在保留的两个升序序列中，重复上述过程，直到两个序列中均只含一个元素时为止，则较小者即为所求的中位数。
+
+伪代码
+
+$MidSearch(A,\,B,\,n)$
+
+```c
+start1 <- 0
+end1 <- n-1
+start2 <- 0
+end2 <- n-1
+while start != end1 || start2 != end2
+	mid1 <- start1 + (start1 - end1)/2
+     mid2 <- start2 + (start2 - end2)/2
+     if A[mid1] == B[mid2]
+          then return A[mid1]
+     if A[mid1] < B[mid2] // 分别考虑奇数和偶数，保持两个子数组元素个数相等
+          if (start1 + end1) % 2 == 0 // 若元素为奇数个
+               then start1 <- mid1 // 舍弃A中间点以前的部分且保留中间点
+               	end2 <- mid2 // 舍弃B中间点以后的部分且保留中间点
+               else // 若元素为偶数个
+                    start1 <- mid1 + 1 // 舍弃A的前半部分
+                    end2 <- mid2 // 舍弃B的后半部分
+               else
+                    if (start1 + end1) % 2 == 0 // 若元素为奇数个
+                         then end1 <- mid1 // 舍弃A中间点以后的部分且保留中间点
+                         start2 <- mid2 // 舍弃B中间点以前的部分且保留中间点
+                         else // 若元素为偶数个
+                              end1 <- mid1 // 舍弃A的后半部分
+                              start2 <- mid2 + 1 // 舍弃B的前半部分
+return A[start1] < B[start2] ? A[start1] : B[start2]
+```
 
 ### 3.2
 
@@ -101,11 +134,11 @@ while low <= high
 
 答：
 
-描述：
+描述
 
 按下标查找中位数的值，如果 `A[n/2] == n/2`，则返回 `ture` ；否则，以该中位数为界将数组分成两个数组，重复上述过程，直到数组的长度为 $1$ 为止。结束递归后，如果算法还未结束，则返回`false`。
 
-伪代码：
+伪代码
 
 $FindEqual(A,\,first,\,last)$
 
