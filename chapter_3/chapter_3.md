@@ -5,13 +5,14 @@
 以下是快速排序中的一种 $PARTITION$ 方法的伪代码及过程：
 
 $PARTITION(A,\,p,\,r)$
+
 ```c
 x <- A[r]
 i <- p-1
 for j <- p to r-1
-	do if A[j] <= x
-		then i <- i+1
-			exchange A[i] <-> A[j]
+     do if A[j] <= x
+          then i <- i+1
+               exchange A[i] <-> A[j]
 exchange A[i+1] <-> A[r]
 return i+1
 ```
@@ -36,7 +37,6 @@ return i+1
 
 假设 $A$ 和 $B$ 是长度为 $n$ 排好序的数组，且数组中每个数都是不同的。
 
-
 ### 3.1
 
 设计一个算法，在 $O\left(\log n \right)$ 时间里找出这 $2n$ 个数的中位数，其中 $2n$ 个数的中位数为从小到大排序的第 $n$ 个数。
@@ -57,14 +57,14 @@ end1 <- n-1
 start2 <- 0
 end2 <- n-1
 while start != end1 || start2 != end2
-	mid1 <- start1 + (start1 - end1)/2
+     mid1 <- start1 + (start1 - end1)/2
      mid2 <- start2 + (start2 - end2)/2
      if A[mid1] == B[mid2]
           then return A[mid1]
      if A[mid1] < B[mid2] // 分别考虑奇数和偶数，保持两个子数组元素个数相等
           if (start1 + end1) % 2 == 0 // 若元素为奇数个
                then start1 <- mid1 // 舍弃A中间点以前的部分且保留中间点
-               	end2 <- mid2 // 舍弃B中间点以后的部分且保留中间点
+                    end2 <- mid2 // 舍弃B中间点以后的部分且保留中间点
                else // 若元素为偶数个
                     start1 <- mid1 + 1 // 舍弃A的前半部分
                     end2 <- mid2 // 舍弃B的后半部分
@@ -96,7 +96,7 @@ $$
   \Theta (1) & \text{若 }  n = 1 \\
   T(n/2) + \Theta(1) & \text{若 } n > 1
   \end{cases}
-  \end{equation}
+\end{equation}
 $$
 
 显然 $T(n) = O(\log n)$。
@@ -108,20 +108,21 @@ $n$ 枚硬币，其中有一枚是假币，己知假币的重量较轻。现只�
 答：
 
 $f(A,first,last)$
+
 ```c
 low <- first
 high <- last
 while low <= high
-	mid <- first + (last - first)/2
-	for i <-low to mid do
-		sum1 += A[i]
-		sum2 += A[i + mid]
-	if sum1 < sum2 //前半部分重量和更小，意味着假币在前半部分
-		then high <- mid - 1 //最高下标调整到中位下标小一位
-		else if sum1 > sum2
-			then low <- mid + 1
-		else
-			then return mid
+      mid <- first + (last - first)/2
+      for i <-low to mid do
+          sum1 += A[i]
+          sum2 += A[i + mid]
+      if sum1 < sum2 //前半部分重量和更小，意味着假币在前半部分
+          then high <- mid - 1 //最高下标调整到中位下标小一位
+          else if sum1 > sum2
+               then low <- mid + 1
+          else
+               then return mid
 ```
 
 ## 5
@@ -136,7 +137,7 @@ while low <= high
 
 描述
 
-按下标查找中位数的值，如果 `A[n/2] == n/2`，则返回 `ture` ；否则，以该中位数为界将数组分成两个数组，重复上述过程，直到数组的长度为 $1$ 为止。结束递归后，如果算法还未结束，则返回`false`。
+按下标查找中位数的值，如果 `A[n/2] == n/2`，则返回 `true` ；否则，以该中位数为界将数组分成两个数组，重复上述过程，直到数组的长度为 $1$ 为止。结束递归后，如果算法还未结束，则返回`false`。
 
 伪代码
 
@@ -146,8 +147,8 @@ $FindEqual(A,\,first,\,last)$
 low <- first
 high <- last
 while low <= high
-	mid <- first + (last - first)/2
-	if (A[mid] == mid) return ture
+     mid <- first + (last - first)/2
+     if (A[mid] == mid) return true
           else FindEqual(A,1,mid-1)
                FindEqual(A,mid+1,n)
 return false
@@ -184,4 +185,3 @@ f(n) = \Theta(1)
 $$
 
 所以 $T(n) = f(n) \lg n = O(\lg n)$。
-
