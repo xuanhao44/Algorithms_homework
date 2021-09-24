@@ -113,26 +113,26 @@ $n$ 枚硬币，其中有一枚是假币，己知假币的重量较轻。现只�
 $f(A,first,last)$
 
 ```c
-if last = first + 1 then
-   if A[last] > A[first] then return first
-   return last
-
-n <- last - first + 1 // 数组长度
-flag <- n % 2 // 奇数为1，偶数为0
-
-if flag then
-   for i <- 1 to n/2 do
-       sumfirst += A[first + i -1]
-       sumlast += A[first + n/2 + i - 1]
-   if sumfirst == sumlast then return first + n/2 //刚好中间
-      else if sumfirst < sumlast then f(A,first,first + n/2 - 1)
-      else then f(A,first + n/2 + 1,last)
-else then
-     for i <- 1 to n/2 do
-         sumfirst += A[first + i -1]
-         sumlast += A[first + n/2 + i - 1]
-     if sumfirst < sumlast then f(A,first,first + n/2 - 1)
-      else then f(A,first + n/2 + 1)
+n = last - first + 1 // 定义长度
+if n = 1 then return first or last
+if n = 2 then
+   if A[first] > A[last] then return last
+      else then return first
+if n % 2 then // 奇数
+   mid = (first + last)/2
+   for i <- 1 to (n - 1)/2 do //排除中位数后，两边的数组长度为 (n - 1)/2
+       sumleft <- sumleft + A[first - 1 + i] // first 对应 1，故从 first - 1 开始
+       sumright <- sumright + A[mid + i] // mid + 1 对应 1，故从 mid 开始
+   if sumleft == sumright then return mid
+      else if sumleft > sumright then return f(A,mid + 1,last) //右边轻，假币在右边
+      else then return f(A,first,mid)
+if !n % 2 then // 偶数
+   mid = (first + last - 1)/2
+   for i <- 1 to n/2 do // 两边的数组长度为 n/2
+       sumleft <- sumleft + A[first - 1 + i]
+       sumright <- sumleft + A[mid + i]
+   if sumleft > sumright then return f(A,mid + 1,last)
+      else then return f(A,first,mid)
 ```
 
 ## 5
