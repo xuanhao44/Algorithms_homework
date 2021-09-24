@@ -45,17 +45,17 @@ return i+1
 
 描述
 
-分别求两个升序序列 $A$、$B$ 的中位数，设为 $a$ 和 $b$。若 $a = b$，则 $a$ 或 $b$ 即为所求的中位数；否则，舍弃 $a$、$b$ 中较小者所在序列之较小一半，同时舍弃较大者所在序列之较大一半，要求两次舍弃的元素个数相同。在保留的两个升序序列中，重复上述过程，直到两个序列中均只含一个元素时为止，则较小者即为所求的中位数。
+假设序列 $A$、$B$ 是升序序列。分别求两个升序序列 $A$、$B$ 的中位数，设为 $a$ 和 $b$。若 $a = b$，则 $a$ 或 $b$ 即为所求的中位数；否则，舍弃 $a$、$b$ 中较小者所在序列之较小一半，同时舍弃较大者所在序列之较大一半，要求两次舍弃的元素个数相同。在保留的两个升序序列中，重复上述过程，直到两个序列中均只含一个元素时为止，则较小者即为所求的中位数。
 
 伪代码
 
 $MidSearch(A,\,B,\,n)$
 
 ```c
-firstA <- 1
-lastA <- n
-firstB <- 1
-lastB <- n
+firstA <- 0
+lastA <- n - 1
+firstB <- 0
+lastB <- n - 1
 
 while firstA != lastA || firstB != lastB
 
@@ -66,10 +66,10 @@ while firstA != lastA || firstB != lastB
         else if A[midA] < B[midB]
                 then lastB <- midB // 舍弃B中间点以后的部分且保留中间点
                      firstA <- midA // 舍弃A中间点以前的部分且保留中间点
-                if (firstA + lastA) % 2 then firstA ++ //偶数则不保留中间点
+                if !((lastA - firstA + 1) % 2) then firstA ++ //偶数则不保留中间点
         else then lastA <- midA
                   firstB <- midB
-             if (firstB + lastB) % 2 then firstB ++
+             if !((lastB - firstB + 1) % 2) then firstB ++
 
 return min(A[firstA],B[firstB])
 ```
@@ -114,8 +114,8 @@ $f(A,first,last)$
 
 ```c
 n = last - first + 1 // 定义长度
-if n = 1 then return first or last
-if n = 2 then
+if n == 1 then return first
+if n == 2 then
    if A[first] > A[last] then return last
       else then return first
 if n % 2 then // 奇数
@@ -125,8 +125,8 @@ if n % 2 then // 奇数
        sumright <- sumright + A[mid + i] // mid + 1 对应 1，故从 mid 开始
    if sumleft == sumright then return mid
       else if sumleft > sumright then return f(A,mid + 1,last) //右边轻，假币在右边
-      else then return f(A,first,mid)
-if !n % 2 then // 偶数
+      else then return f(A,first,mid - 1)
+if !(n % 2) then // 偶数
    mid = (first + last - 1)/2
    for i <- 1 to n/2 do // 两边的数组长度为 n/2
        sumleft <- sumleft + A[first - 1 + i]
@@ -147,7 +147,7 @@ if !n % 2 then // 偶数
 
 描述
 
-计算中位数 $mid$ 并进行 $A[mid] == mid$ 的判断，如果为真，则返回 $true$ ；如果 $A[mid] > mid$，**因为数组是由不同的整数组成的**，所以 $mid$ 之后的所有元素都无法满足 $A[i] == i$，可以舍弃；如果 $A[mid] < mid$，同理，$mid$ 之前的所有元素也无法满足 $A[i] == i$，可以舍弃。
+假设序列 $A$ 是升序序列。计算中位数 $mid$ 并进行 $A[mid] = mid$ 的判断，如果为真，则返回 $true$ ；如果 $A[mid] > mid$，**因为数组是由不同的整数组成的**，所以 $mid$ 之后的所有元素都无法满足 $A[i] = i$，可以舍弃；如果 $A[mid] < mid$，同理，$mid$ 之前的所有元素也无法满足 $A[i] = i$，可以舍弃。
 
 $eg$：假设数组有相同元素，则：
 
@@ -155,28 +155,27 @@ $eg$：假设数组有相同元素，则：
 | :--: | :--: | :--: | :--: | :---: | :---: | :---: | :---: | :--: | :--: |
 |  值  |  1   |  2   |  3   | **4** | **6** | **6** | **6** |  7   |  10  |
 
-有相同的整数使得寻找中位数这一举动变得相对无意义，因为即使判断了 $A[mid] == mid$ 也不能以此把数组划分为有意义的子数组。你可以以该中位数为界将数组分成两个数组，重复上述过程，直到数组的长度为 $1$ 为止。但这样做的时间复杂度和线性的查找没有区别，都是 $O(n)$。
+有相同的整数使得寻找中位数这一举动变得相对无意义，因为即使判断了 $A[mid] = mid$ 也不能以此把数组划分为有意义的子数组。你可以以该中位数为界将数组分成两个数组，重复上述过程，直到数组的长度为 $1$ 为止。但这样做的时间复杂度和线性的查找没有区别，都是 $O(n)$。
 
-不同的值使得情况大为不同。还是使用上面的例子，如果 $A[5] = 6$，那么 $A[6]$ 必然不可能是 $6$，只能是大于等于 $7$ 的数，在这样的情况下 $A[7]$ 绝对不可能为 $7$。这样的情况可以一直向后延伸，所以 $mid$ 之后的所有元素都无法满足 $A[i] == i$。
+不同的值使得情况大为不同。还是使用上面的例子，如果 $A[5] = 6$，那么 $A[6]$ 必然不可能是 $6$，只能是大于等于 $7$ 的数，在这样的情况下 $A[7]$ 绝对不可能为 $7$。这样的情况可以一直向后延伸，所以 $mid$ 之后的所有元素都无法满足 $A[i] = i$。
 
 伪代码
 
 $FindEqual(A,\,first,\,last)$
 
 ```c
-low <- first
-high <- last
-     
-while low <= high
-      mid <- first + (last - first)/2
-      if A[mid] == mid 
-         then return true
-         else if A[mid] > mid
-                 FindEqual(A,1,mid-1)
-         else
-              FindEqual(A,mid+1,n)
-              
-return false
+n = last - first + 1
+if n == 1 then return A[first] == first
+if n % 2 then
+   mid = (first + last)/2
+   if A[mid] == mid then return true
+      else if A[mid] > mid then FindEqual(A,first,mid - 1)
+      else then FindEqual(A,mid + 1,last)
+if !(n % 2) then
+   mid = (first + last - 1)/2
+   if A[mid] == mid then return true
+      else if A[mid] > mid then FindEqual(A,first,mid - 1)
+      else then FindEqual(A,mid + 1,last)
 ```
 
 ### 5.2
@@ -212,3 +211,159 @@ f(n) = \Theta(1)
 $$
 
 所以 $T(n) = f(n) \lg n = O(\lg n)$。
+
+## 附录
+
+[$3.c$](3.c)
+
+```c
+#include <stdio.h>
+int MidSearch(int A[], int B[], int n)
+{
+    int firstA = 0;
+    int lastA = n - 1;
+    int firstB = 0;
+    int lastB = n - 1;
+    int midA, midB;
+
+    while ((firstA != lastA) || firstB != lastB)
+    {
+        midA = firstA + (lastA - firstA) / 2;
+        midB = firstB + (lastB - firstB) / 2;
+
+        if (A[midA] == B[midB])
+            return A[midA];
+        else if (A[midA] < B[midB])
+        {
+            lastB = midB;
+            firstA = midA;
+            if (!((lastA - firstA + 1) % 2))
+                firstA++;
+        }
+        else
+        {
+            lastA = midA;
+            firstB = midB;
+            if (!((lastB - firstB + 1) % 2))
+                firstB++;
+        }
+    }
+    if (A[firstA] < B[firstB])
+        return A[firstA];
+    else
+        return B[firstB];
+}
+
+int main()
+{
+    int A[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    int B[10] = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20};
+    printf("%d", MidSearch(A, B, 10));
+    return 0;
+}
+```
+
+[$4.c$](4.c)
+
+```c
+#include <stdio.h>
+int f(int A[], int first, int last)
+{
+    int n = last - first + 1;
+    int mid;
+    int sumleft = 0;
+    int sumright = 0;
+    if (n == 1)
+        return first;
+    if (n == 2)
+    {
+        if (A[first] > A[last])
+            return last;
+        else
+            return first;
+    }
+    if (n % 2)
+    {
+        mid = (first + last) / 2;
+        for (int i = 1; i <= (n - 1) / 2; i++)
+        {
+            sumleft += A[first - 1 + i];
+            sumright += A[mid + i];
+        }
+        if (sumleft == sumright)
+            return mid;
+        else if (sumleft > sumright)
+            return f(A, mid + 1, last);
+        else
+            return f(A, first, mid - 1);
+    }
+    if (!(n % 2))
+    {
+        mid = (first + last - 1) / 2;
+        for (int i = 1; i <= n / 2; i++)
+        {
+            sumleft += A[first - 1 + i];
+            sumright += A[mid + i];
+        }
+        if (sumleft > sumright)
+            return f(A, mid + 1, last);
+        else
+            return f(A, first, mid);
+    }
+}
+
+int main()
+{
+    int A[10] = {10, 10, 10, 10, 9, 10, 10, 10, 10, 10};
+    printf("%d", f(A, 0, 9));
+    return 0;
+}
+```
+
+[$5.c$](5.c)
+
+```c
+#include <stdio.h>
+int FindEqual(int A[], int first, int last)
+{
+    int n = last - first + 1;
+    int mid;
+    if (n == 1)
+        return A[first] == first;
+    if (n % 2)
+    {
+        mid = (first + last) / 2;
+        if (A[mid] == mid)
+            return 1;
+        else if (A[mid] > mid)
+            return FindEqual(A, first, mid - 1);
+        else
+            return FindEqual(A, mid + 1, last);
+    }
+    if (!(n % 2))
+    {
+        mid = (first + last - 1) / 2;
+        if (A[mid] == mid)
+            return 1;
+        else if (A[mid] > mid)
+            return FindEqual(A, first, mid - 1);
+        else
+            return FindEqual(A, mid + 1, last);
+    }
+}
+int main()
+{
+    //每个都符合
+    int A[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    printf("%d\n", FindEqual(A, 0, 9));
+
+    //只有B[0]=0
+    int B[10] = {0, 2, 4, 6, 8, 10, 12, 14, 16, 18};
+    printf("%d\n", FindEqual(B, 0, 9));
+
+    //都不符合
+    int C[10] = {1, 2, 3, 4, 5, 6, 7, 7, 9, 10};
+    printf("%d\n", FindEqual(C, 0, 9));
+    return 0;
+}
+```
