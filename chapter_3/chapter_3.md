@@ -11,8 +11,8 @@ x <- A[r]
 i <- p-1
 for j <- p to r-1
      do if A[j] <= x
-          then i <- i+1
-               exchange A[i] <-> A[j]
+           then i <- i+1
+                exchange A[i] <-> A[j]
 exchange A[i+1] <-> A[r]
 return i+1
 ```
@@ -52,29 +52,26 @@ return i+1
 $MidSearch(A,\,B,\,n)$
 
 ```c
-start1 <- 0
-end1 <- n-1
-start2 <- 0
-end2 <- n-1
-while start != end1 || start2 != end2
-     mid1 <- start1 + (start1 - end1)/2
-     mid2 <- start2 + (start2 - end2)/2
-     if A[mid1] == B[mid2]
-          then return A[mid1]
-     if A[mid1] < B[mid2] // 分别考虑奇数和偶数，保持两个子数组元素个数相等
-          if (start1 + end1) % 2 == 0 // 若元素为奇数个
-               then start1 <- mid1 // 舍弃A中间点以前的部分且保留中间点
-                    end2 <- mid2 // 舍弃B中间点以后的部分且保留中间点
-                    else // 若元素为偶数个
-                         start1 <- mid1 + 1 // 舍弃A的前半部分
-                         end2 <- mid2 // 舍弃B的后半部分
-           if (start1 + end1) % 2 == 0 // 若元素为偶数个
-                then end1 <- mid1 // 舍弃A中间点以后的部分且保留中间点
-                     start2 <- mid2 // 舍弃B中间点以前的部分且保留中间点
-                     else // 若元素为偶数个
-                          end1 <- mid1 // 舍弃A的后半部分
-                          start2 <- mid2 + 1 // 舍弃B的前半部分
-return A[start1] < B[start2] ? A[start1] : B[start2]
+firstA <- 1
+lastA <- n
+firstB <- 1
+lastB <- n
+
+while firstA != lastA || firstB != lastB
+
+     midA <- firstA + (lastA - firstA)/2
+     midB <- firstB + (lastB - firstB)/2
+     
+     if A[midA] == B[midB] then return A[midA]
+        else if A[midA] < B[midB]
+                then lastB <- midB // 舍弃B中间点以后的部分且保留中间点
+                     firstA <- midA // 舍弃A中间点以前的部分且保留中间点
+                if (firstA + lastA) % 2 then firstA ++ //偶数则不保留中间点
+        else then lastA <- midA
+                  firstB <- midB
+             if (firstB + lastB) % 2 then firstB ++
+
+return min(A[firstA],B[firstB])
 ```
 
 ### 3.2
@@ -83,7 +80,7 @@ return A[start1] < B[start2] ? A[start1] : B[start2]
 
 答：
 
-- 分解：分解步骤仅仅比较两个升序序列 $A$、$B$ 的中位数，需要常量时间，因此，$D(n) = \Theta (1)$。
+- 分解：分解步骤仅仅计算并比较两个中位数，需要常量时间，因此，$D(n) = \Theta (1)$。
 - 解决：我们递归地解决一个规模均为 $n/2$ 的子问题，将贡献 $T(n/2)$ 的运行时间。
 - 合并：我们已经注意到这里不需要合并。
 
@@ -105,7 +102,7 @@ a = 1,b = 2,f(n) = \Theta(1),n^{log_b a} = n^{log_2 1} = 1 \\
 f(n) = \Theta(1)
 $$
 
-所以 $T(n) = f(n) \log n = \Theta(\log n)$。
+所以 $T(n) = f(n) \log n = \Theta(\log n)$，即 $T(n) = O(\log n)$
 
 ## 4
 
@@ -116,19 +113,26 @@ $n$ 枚硬币，其中有一枚是假币，己知假币的重量较轻。现只�
 $f(A,first,last)$
 
 ```c
-low <- first
-high <- last
-while low <= high
-      mid <- first + (last - first)/2
-      for i <-low to mid do
-          sum1 += A[i]
-          sum2 += A[i + mid]
-      if sum1 < sum2 //前半部分重量和更小，意味着假币在前半部分
-          then high <- mid - 1 //最高下标调整到中位下标小一位
-          else if sum1 > sum2
-               then low <- mid + 1
-          else
-               then return mid
+if last = first + 1 then
+   if A[last] > A[first] then return first
+   return last
+
+n <- last - first + 1 // 数组长度
+flag <- n % 2 // 奇数为1，偶数为0
+
+if flag then
+   for i <- 1 to n/2 do
+       sumfirst += A[first + i -1]
+       sumlast += A[first + n/2 + i - 1]
+   if sumfirst == sumlast then return first + n/2 //刚好中间
+      else if sumfirst < sumlast then f(A,first,first + n/2 - 1)
+      else then f(A,first + n/2 + 1,last)
+else then
+     for i <- 1 to n/2 do
+         sumfirst += A[first + i -1]
+         sumlast += A[first + n/2 + i - 1]
+     if sumfirst < sumlast then f(A,first,first + n/2 - 1)
+      else then f(A,first + n/2 + 1)
 ```
 
 ## 5
@@ -162,14 +166,16 @@ $FindEqual(A,\,first,\,last)$
 ```c
 low <- first
 high <- last
+     
 while low <= high
-     mid <- first + (last - first)/2
-     if A[mid] == mid 
-          then return true
-          else if A[mid] > mid
-               FindEqual(A,1,mid-1)
-          else
-               FindEqual(A,mid+1,n)
+      mid <- first + (last - first)/2
+      if A[mid] == mid 
+         then return true
+         else if A[mid] > mid
+                 FindEqual(A,1,mid-1)
+         else
+              FindEqual(A,mid+1,n)
+              
 return false
 ```
 
