@@ -4,7 +4,7 @@
 
 以下是快速排序中的一种 $PARTITION$ 方法的伪代码及过程：
 
-$PARTITION(A,\,p,\,r)$
+$PARTITION(A,p,r)$
 
 ```c
 x <- A[r]
@@ -51,7 +51,7 @@ return i+1
 
 伪代码
 
-$MidSearch(A,\,B,\,n)$
+$MidSearch(A,B,n)$
 
 ```c
 firstA <- 0
@@ -163,7 +163,7 @@ $eg$：假设数组有相同元素，则：
 
 伪代码
 
-$FindEqual(A,\,first,\,last)$
+$FindEqual(A,first,last)$
 
 ```c
 n = last - first + 1
@@ -219,3 +219,4 @@ $$
 三道题的代码 c 语言版
 
 [$3.c$](3.c)	[$4.c$](4.c)	 [$5.c$](5.c)
+
