@@ -16,17 +16,29 @@ int MidSearch(int A[], int B[], int n)
             return A[midA];
         else if (A[midA] < B[midB])
         {
-            lastB = midB;
-            firstA = midA;
-            if (!((lastA - firstA + 1) % 2))
-                firstA++;
+            if ((lastA - firstA + 1) % 2)
+            {
+                lastB = midB;
+                firstA = midA;
+            }
+            else
+            {
+                lastB = midB;
+                firstA = midA + 1;
+            }
         }
         else
         {
-            lastA = midA;
-            firstB = midB;
-            if (!((lastB - firstB + 1) % 2))
-                firstB++;
+            if ((lastB - firstB + 1) % 2)
+            {
+                lastA = midA;
+                firstB = midB;
+            }
+            else
+            {
+                lastA = midA;
+                firstB = midB + 1;
+            }
         }
     }
     if (A[firstA] < B[firstB])

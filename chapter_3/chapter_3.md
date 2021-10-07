@@ -66,12 +66,17 @@ while firstA != lastA || firstB != lastB
      
      if A[midA] == B[midB] then return A[midA]
         else if A[midA] < B[midB]
-                then lastB <- midB // 舍弃B中间点以后的部分且保留中间点
-                     firstA <- midA // 舍弃A中间点以前的部分且保留中间点
-                if !((lastA - firstA + 1) % 2) then firstA ++ //偶数则不保留中间点
-        else then lastA <- midA
-                  firstB <- midB
-             if !((lastB - firstB + 1) % 2) then firstB ++
+                if (lastA - firstA + 1) % 2
+                   then lastB <- midB // 舍弃B中间点以后的部分且保留中间点
+                        firstA <- midA // 舍弃A中间点以前的部分且保留中间点
+                   else then lastB <- midB
+                             firstA <- midA + 1
+        else then
+             if (lastB - firstB + 1) % 2
+                then lastA <- midA
+                     firstB <- midB
+                else then lastA <- midA
+                          firstB <- midB + 1
 
 return min(A[firstA],B[firstB])
 ```
