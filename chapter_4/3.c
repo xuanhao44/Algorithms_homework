@@ -1,40 +1,31 @@
 #include <stdio.h>
-const int MAX_NUM = 100000;
-
+#include <stdlib.h>
 int min(int a, int b)
 {
-    if (a > b)
-        return b;
-    else
-        return a;
+    return (a < b) ? a : b;
 }
 
-int mininum(int coins[], int n, int amount)
+int coinChange(int *coins, int coinsSize, int amount)
 {
-    if (amount == 0)
-        return 0;
-    int m[amount + 2];
-    // 初始化为一个较大的值, 若此值最后未更新说明没有硬币组合能凑出面额 i
-    for (int i = 1; i <= amount; i++)
-        m[i] = MAX_NUM;
-    // m[0]只会出现于 m[i] = m[0] + m[i], 故设为 0, 便于计算
-    m[0] = 0;
-    // 所有在 coins 数组中出现过的硬币面额, 达到这个面额所需的最小硬币数量一定是 1
-    // 如 coins 数组中有 10, 则一定有 m[10] = 1
-    for (int i = 1; i <= n; i++)
-    {
-        if (coins[i] <= amount)
-            m[coins[i]] = 1;
-    }
+    int MAX_NUM = amount + 1;
+    if (coins == NULL || coinsSize == 0 || amount < 0)  return -1;
+    if (amount == 0) return 0;
+    if (coinsSize == 1 && (amount % coins[0])) return -1;
 
-    for (int i = 1; i <= amount; i++)
-        for (int k = 0; k <= i / 2; k++)
-            m[i] = min(m[i], m[k] + m[i - k]);
+    int dp[amount + 1];
 
-    if (m[amount] == MAX_NUM)
-        return -1;
-    else
-        return m[amount];
+    for (int i = 0; i <= amount; i++)
+        dp[i] = MAX_NUM;
+    dp[0] = 0;
+
+    for (int i = 0; i <= amount; i++)
+        for (int j = 0; j < coinsSize; j++)
+        {
+            if (i < coins[j]) continue;
+            dp[i] = min(dp[i], dp[i - coins[j]] + 1);
+        }
+
+    return (dp[amount] == MAX_NUM) ? -1 : dp[amount];
 }
 
 int main()
@@ -54,12 +45,12 @@ int main()
     int coins7[2] = {2147483647}; //超大 coins 面额打击, 大于 amount 的 coins 直接不考虑
     int amount7 = 2;
 
-    printf("%d\n", mininum(coins1, 3, amount1));
-    printf("%d\n", mininum(coins2, 1, amount2));
-    printf("%d\n", mininum(coins3, 8, amount3));
-    printf("%d\n", mininum(coins4, 8, amount4));
-    printf("%d\n", mininum(coins5, 8, amount5));
-    printf("%d\n", mininum(coins6, 8, amount6));
-    printf("%d\n", mininum(coins7, 1, amount7));
+    printf("%d\n", coinChange(coins1, 3, amount1));
+    printf("%d\n", coinChange(coins2, 1, amount2));
+    printf("%d\n", coinChange(coins3, 8, amount3));
+    printf("%d\n", coinChange(coins4, 8, amount4));
+    printf("%d\n", coinChange(coins5, 8, amount5));
+    printf("%d\n", coinChange(coins6, 8, amount6));
+    printf("%d\n", coinChange(coins7, 1, amount7));
     return 0;
 }

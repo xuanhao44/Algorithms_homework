@@ -9,6 +9,8 @@
 (2) 有 $5$ 堆石子 ($n=5$)，每堆石子大小分别为 $<1,3,5,2,4>$,求出把所有石子合并成一堆的最小花费(要求写出运算矩阵)。（10分）
 (3) 写出该问题的伪代码。（10分）
 
+
+
 答：
 
 设 $w[i]$ 为第 $i$ 堆石子的数量；
@@ -71,6 +73,8 @@ c 语言代码：[1.c](1.c)
 | $p_i$ |      | 0.04 | 0.06 | 0.08 | 0.02 | 0.10 | 0.12 | 0.14 |
 | $q_j$ | 0.06 | 0.06 | 0.06 | 0.06 | 0.05 | 0.05 | 0.05 | 0.05 |
 
+
+
 答：
 
 递推方程
@@ -117,31 +121,34 @@ $$
 
 运用动态规划的思想作答，请写出分析过程和状态转移方程，并用一种语言（最好是 $C++$ 或 $JAVA$ ）实现你的思路，并保证代码能正确运行，复杂度尽可能低。
 
+
+
+原题：[322. 零钱兑换 - 力扣（LeetCode）](https://leetcode-cn.com/problems/coin-change/)
+
 答：
 
 1. 分析优化解的结构
 
-   设凑成总金额 $i$ 所需的最少的硬币个数为 $m[i]$。
+   设凑成总金额 $i$ 所需的最少的硬币个数为 $dp[i]$，设选择的最后一枚硬币为第 $j$ 枚硬币，其面值为 $c_j$。
 
-   若计算 $m[i]$ 的优化顺序在 $k$ 处分开，即 $m[i] = m[k] + m[n-k]$，则在 $m[i]$ 的优化顺序中，对应于子问题 $m[k]$ 的解必定是 $m[k]$ 的优化解；对应于子问题 $m[n-k]$ 的解必须是 $m[n-k]$ 的优化解。
+   若$dp[i - c_j]$ 存在，则求 $dp[i - c_j]$ 是求 $dp[i]$ 的子问题。对应于子问题 $dp[i - c_j]$  的解是子问题 $dp[i - c_j]$ 的优化解。
 
-   证明：反证法
+   证明：反证法略
 
-   子问题的重叠性：以上示例 $1$ 为例，可见重复的 $m[i]$ 非常多。
+   子问题的重叠性：上示例 $1$
 
    ![3.1.svg](3.1.svg)
-   
+
 2. 递归地定义最优值的代价
    $$
    \begin{equation}
-     m[i] = \begin{cases}
+     dp[i] = \begin{cases}
      0, & \text{if } i = 0; \\
-     1, & \text{if } i \in costs[]; \\
-     min_{0 \le k \le n/2}\{m[k] + m[n-k]\}, & \text{if 其他} .
+     min_{0 \le k \le coinsSize - 1}\{dp[i],dp[i - c_j] + 1\}, & \text{if } i > c_j .
     \end{cases}
     \end{equation}
    $$
-   
+
 3. 自底向上地计算优化解的代价保存之，并获取构造最优值的信息 & 根据构造最优值的信息构造优化解
 
    一维数组，由小到大计算即可。
@@ -150,42 +157,33 @@ $$
 
    ```c
    #include <stdio.h>
-   const int MAX_NUM = 100000;
-   
+   #include <stdlib.h>
    int min(int a, int b)
    {
-       if (a > b)
-           return b;
-       else
-           return a;
+       return (a < b) ? a : b;
    }
    
-   int mininum(int coins[], int n, int amount)
+   int coinChange(int *coins, int coinsSize, int amount)
    {
-       if (amount == 0)
-           return 0;
-       int m[amount + 2];
-       // 初始化为一个较大的值, 若此值最后未更新说明没有硬币组合能凑出面额 i
-       for (int i = 1; i <= amount; i++)
-           m[i] = MAX_NUM;
-       // m[0]只会出现于 m[i] = m[0] + m[i], 故设为 0, 便于计算
-       m[0] = 0;
-       // 所有在 coins 数组中出现过的硬币面额, 达到这个面额所需的最小硬币数量一定是 1
-       // 如 coins 数组中有 10, 则一定有 m[10] = 1
-       for (int i = 1; i <= n; i++)
-       {
-           if (coins[i] <= amount)
-               m[coins[i]] = 1;
-       }
+       int MAX_NUM = amount + 1;
+       if (coins == NULL || coinsSize == 0 || amount < 0)  return -1;
+       if (amount == 0) return 0;
+       if (coinsSize == 1 && (amount % coins[0])) return -1;
    
-       for (int i = 1; i <= amount; i++)
-           for (int k = 0; k <= i / 2; k++)
-               m[i] = min(m[i], m[k] + m[i - k]);
+       int dp[amount + 1];
    
-       if (m[amount] == MAX_NUM)
-           return -1;
-       else
-           return m[amount];
+       for (int i = 0; i <= amount; i++)
+           dp[i] = MAX_NUM;
+       dp[0] = 0;
+   
+       for (int i = 0; i <= amount; i++)
+           for (int j = 0; j < coinsSize; j++)
+           {
+               if (i < coins[j]) continue;
+               dp[i] = min(dp[i], dp[i - coins[j]] + 1);
+           }
+   
+       return (dp[amount] == MAX_NUM) ? -1 : dp[amount];
    }
    
    int main()
@@ -205,16 +203,16 @@ $$
        int coins7[2] = {2147483647}; //超大 coins 面额打击, 大于 amount 的 coins 直接不考虑
        int amount7 = 2;
    
-       printf("%d\n", mininum(coins1, 3, amount1));
-       printf("%d\n", mininum(coins2, 1, amount2));
-       printf("%d\n", mininum(coins3, 8, amount3));
-       printf("%d\n", mininum(coins4, 8, amount4));
-       printf("%d\n", mininum(coins5, 8, amount5));
-       printf("%d\n", mininum(coins6, 8, amount6));
-       printf("%d\n", mininum(coins7, 1, amount7));
+       printf("%d\n", coinChange(coins1, 3, amount1));
+       printf("%d\n", coinChange(coins2, 1, amount2));
+       printf("%d\n", coinChange(coins3, 8, amount3));
+       printf("%d\n", coinChange(coins4, 8, amount4));
+       printf("%d\n", coinChange(coins5, 8, amount5));
+       printf("%d\n", coinChange(coins6, 8, amount6));
+       printf("%d\n", coinChange(coins7, 1, amount7));
        return 0;
    }
    ```
-   
+
    源文件：[3.c](3.c)
 
