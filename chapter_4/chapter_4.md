@@ -22,7 +22,7 @@ $$
 \begin{equation}
   dp[i][j] = \begin{cases}
   0, & \text{if } i = j; \\
-  min_{i \le k < j}{dp[i][k] + dp[k+1,j] + R[i][j]}, & \text{if } j > i.
+  min_{i \le k < j}\{dp[i][k] + dp[k+1,j] + R[i][j]\}, & \text{if } j > i.
   \end{cases}
   \end{equation}
 $$
@@ -80,7 +80,7 @@ $$
 \begin{equation}
   E(i,j) = \begin{cases}
   q_{i-1} = q_j, & \text{if } j = i - 1; \\
-  min_{i \le k \le j}{E(i,R-1) + E(r+1,j) + W(i,j)}, & \text{if } j > i.
+  min_{i \le k \le j}\{E(i,R-1) + E(r+1,j) + W(i,j)\}, & \text{if } j > i.
   \end{cases}
   \end{equation}
 $$
@@ -139,7 +139,7 @@ $$
      m[i] = \begin{cases}
      0, & \text{if } i = 0; \\
      1, & \text{if } i \in costs[]; \\
-     min_{0 \le k \le n/2}{m[k] + m[n-k]}, & \text{if 其他} .
+     min_{0 \le k \le n/2}\{m[k] + m[n-k]\}, & \text{if 其他} .
     \end{cases}
     \end{equation}
    $$
