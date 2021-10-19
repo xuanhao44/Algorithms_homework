@@ -30,7 +30,7 @@ int coinChange(int *coins, int coinsSize, int amount)
 
 int main()
 {
-    int coins1[4] = {0, 1, 2, 5};
+    int coins1[4] = {1, 2, 5};
     int amount1 = 11;
     int coins2[2] = {2};
     int amount2 = 3;
