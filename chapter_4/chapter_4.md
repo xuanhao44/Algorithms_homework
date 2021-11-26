@@ -57,7 +57,7 @@ for l <- 2 to n do
         R[i][j] = R[i][j - 1] + w[j]
         for k <- i to j - 1 do
             q = dp[i][k] + dp[k + 1][j] + R[i][j]
-            if(q < dp[i][j]) then
+            if (q < dp[i][j]) then
                 dp[i][j] = q
 return dp[1][n]
 ```
