@@ -254,7 +254,7 @@ function dfs(E, u, clk)
 ```
 
 ```c++
-function Hungarian(E, L, R)
+function Hu(E, L, R)
      // 边集、人、床位
      // 若求得的最大匹配数等于 L 的大小，说明存在一个方案；否则说明不存在
      clk <- 0
